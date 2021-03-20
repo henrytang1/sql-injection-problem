@@ -1,19 +1,27 @@
 import os
-import sqlite3
 import sys
+import psycopg2.pool
+from urllib.parse import urlparse
+
+def getConn():
+    db_url = urlparse(os.environ.get('DATABASE_URL'))
+
+    dbconfig = {
+        'minconn': 1,
+        'maxconn': 3,
+        'user': db_url.username,
+        'password': db_url.password,
+        'host': db_url.hostname,
+        'database': db_url.path[1:],
+    }
+
+    con = psycopg2.pool.SimpleConnectionPool(**dbconfig)
+
+    return con
 
 
-def getConn(db_path):
-    if not os.path.exists(db_path):
-        print(f'database {db_path} not found', file=sys.stderr)
-        raise FileNotFoundError(f'database {db_path} not found')
-        # sys.exit(1)
-    conn = sqlite3.connect(db_path)
-    return conn
-
-
-def runQuery(username):
-    conn = getConn('users.db')
+def runQuery(username, pool):
+    conn = pool.getconn()
     cur = conn.cursor()
 
     query = '''
@@ -22,12 +30,10 @@ def runQuery(username):
         WHERE username = \'%s\''''
 
     try:
-        # cur.execute(query, params)
         cur.execute(query % username)
-    except sqlite3.Error as e:
+    except psycopg2.Error as e:
         print(f'{e}', file=sys.stderr)
         raise e
-        # sys.exit(1)
 
     res = cur.fetchone()[0]
 
@@ -38,6 +44,3 @@ def runQuery(username):
         return True
     else:
         return False
-
-if __name__ == "__main__":
-    runRegQuery()
