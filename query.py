@@ -20,7 +20,34 @@ def getConn():
     return con
 
 
-def runQuery(username, pool):
+def loginQuery(params):
+    pool = getConn()
+    conn = pool.getconn()
+    cur = conn.cursor()
+
+    query = '''
+        SELECT code
+        FROM users
+        WHERE username = %s AND password = %s;
+    '''
+
+    try:
+        cur.execute(query, (params["username"], params["password"]))
+    except psycopg2.Error as e:
+        raise e
+    
+    res = cur.fetchone()
+    if res != None:
+        res = res[0]
+
+    cur.close()
+    conn.close()
+
+    return res
+
+
+def existenceQuery(params):
+    pool = getConn()
     conn = pool.getconn()
     cur = conn.cursor()
 
@@ -30,11 +57,11 @@ def runQuery(username, pool):
         WHERE username = \'%s\''''
 
     try:
-        cur.execute(query % username)
+        cur.execute(query % params["username"])
     except psycopg2.Error as e:
         print(f'{e}', file=sys.stderr)
         raise e
-
+    
     res = cur.fetchone()[0]
 
     cur.close()

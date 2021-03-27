@@ -1,27 +1,51 @@
-from flask import Flask
-from query import runQuery
+from flask import Flask, request
+from query import loginQuery, existenceQuery
 from dotenv import load_dotenv
-from query import getConn
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./webui/build', static_url_path='/')
+
 app.config['DEBUG'] = True
 
 load_dotenv()
 
-pool = getConn()
-
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def index():
+    return app.send_static_file('index.html')
 
-@app.route('/<username>', methods=['GET'])
-def get_mentor_profile(username):
+@app.route('/login')
+def login():
+    return app.send_static_file('index.html')
+
+@app.route('/forgot')
+def forgot():
+    return app.send_static_file('index.html')
+
+@app.route('/api/login', methods=['GET'])
+def check_credentials():
+    params = {}
+    params['username'] = request.args.get('username')
+    params['password'] = request.args.get('password')
+
     try:
-        res = runQuery(username, pool)
+        res = loginQuery(params)
     except Exception as e:
-        return "Database error"
+        return "Not Correct"
 
+    if res != None:
+        return res
+    else:
+        return "Not Correct"
+
+
+@app.route('/api/exists', methods=['GET'])
+def check_username():
+    params = {'username': request.args.get('username')}
+    try:
+        res = existenceQuery(params)
+    except Exception as e:
+        return "Does Not Exist"
+    
     if res:
-        return "Exists!"
+        return "Exists"
     else:
         return "Does Not Exist"
