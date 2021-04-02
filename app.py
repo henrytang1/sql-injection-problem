@@ -20,7 +20,7 @@ def update_times(query_times):
         query_times = json.loads(query_times)
 
     acc_speed = True
-    if len(query_times) >= 10:
+    if len(query_times) >= 20:
         earliest = query_times[0]
         if now - earliest < 60:
             acc_speed = False
