@@ -23,7 +23,7 @@ const Login = () => {
                     password: password,
                 }
             }).then((response) => {
-                console.log(response)
+                // console.log(response)
                 if (response.data === "Too many requests") {
                     setMessage('You have submitted too many requests. Try again in a few minutes.')
                     setColor("red")
