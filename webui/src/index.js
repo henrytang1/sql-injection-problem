@@ -11,11 +11,11 @@ ReactDOM.render(
   <React.StrictMode>
       <BrowserRouter forceRefresh={true}>
           <Switch>
-              <Route path="/login">
+              <Route exact path={["/login", "/"]}>
                   <Login/>
               </Route>
 
-              <Route path="/forgot">
+              <Route exact path="/forgot">
                   <Forgot/>
               </Route>
           </Switch>

@@ -21,10 +21,13 @@ const Forgot = () => {
                 username: team_id,
             }
         }).then((response) => {
-            console.log(response)
+            // console.log(response)
             if (response.data === "Exists") {
                 setMessage("A reset link has been sent to this email.")
                 setColor("green")
+            } else if (response.data === "Too many requests") {
+                setMessage('You have submitted too many requests. Try again in a few minutes.')
+                setColor("red")
             } else {
                 setMessage("This email does not exist in the database.")
                 setColor("red")

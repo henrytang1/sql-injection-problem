@@ -24,7 +24,10 @@ const Login = () => {
                 }
             }).then((response) => {
                 console.log(response)
-                if (response.data !== "Not Correct") {
+                if (response.data === "Too many requests") {
+                    setMessage('You have submitted too many requests. Try again in a few minutes.')
+                    setColor("red")
+                } else if (response.data === "Not Correct") {
                     setMessage('Your lucky code is '+ response.data)
                     setColor("green")
                 } else {
