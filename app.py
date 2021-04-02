@@ -51,7 +51,7 @@ def index():
 def check_credentials():
     query_times = request.cookies.get('queryTimes')
     acc_speed, query_times = update_times(query_times)
-    print(acc_speed, query_times)
+    # print(acc_speed, query_times)
 
     if not acc_speed:
         response = make_response("Too many requests", 200)
@@ -70,6 +70,7 @@ def check_credentials():
 
     if res == None:
         res = "Not Correct"
+        
     response = make_response(res, 200)
     response.mimetype = "text/plain"
     response.set_cookie('queryTimes', json.dumps(query_times))
