@@ -22,7 +22,10 @@ const Forgot = () => {
             }
         }).then((response) => {
             // console.log(response)
-            if (response.data === "Exists") {
+            if (response.data === "Use a browser"){
+                setMessage('Use a browser. Using the command line is not allowed.')
+                setColor("red")
+            } if (response.data === "Exists") {
                 setMessage("A reset link has been sent to this email.")
                 setColor("green")
             } else if (response.data === "Too many requests") {

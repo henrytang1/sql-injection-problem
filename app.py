@@ -50,6 +50,11 @@ def index():
 @app.route('/api/login', methods=['GET'])
 def check_credentials():
     query_times = request.cookies.get('queryTimes')
+    if query_times is None:
+        response = make_response("Use a browser", 200)
+        response.mimetype = "text/plain"
+        return response
+
     acc_speed, query_times = update_times(query_times)
     # print(acc_speed, query_times)
 
@@ -84,6 +89,11 @@ def check_credentials():
 @app.route('/api/exists', methods=['GET'])
 def check_username():
     query_times = request.cookies.get('queryTimes')
+    if query_times is None:
+        response = make_response("Use a browser", 200)
+        response.mimetype = "text/plain"
+        return response
+
     acc_speed, query_times = update_times(query_times)
 
     if not acc_speed:
