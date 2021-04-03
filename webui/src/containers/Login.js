@@ -28,7 +28,7 @@ const Login = () => {
                     setMessage('You have submitted too many requests. Try again in a few minutes.')
                     setColor("red")
                 } else if (response.data !== "Not Correct") {
-                    setMessage('Your lucky code is '+ response.data)
+                    setMessage('Your grades are '+ response.data)
                     setColor("green")
                 } else {
                     setMessage("Incorrect Credentials")
