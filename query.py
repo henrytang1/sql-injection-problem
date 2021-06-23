@@ -66,8 +66,9 @@ def existenceQuery(params):
     query = '''
         SELECT COUNT(1)
         FROM users
-        WHERE username = \'%s\''''
-
+        WHERE username = \'%s\'
+    '''
+    
     try:
         cur.execute(query % params["username"])
     except sqlite3.Error as e:
